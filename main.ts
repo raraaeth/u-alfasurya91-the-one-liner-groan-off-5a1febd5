@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 // The One-Liner Groan-Off entry.
@@ -14,6 +14,12 @@ function main(): void {
   const target: string = join(outputDir, "entry.txt");
   // Write exactly the line, with no trailing newline.
   writeFileSync(target, LINE, { encoding: "utf8" });
+  // Verify after writing: read the file back and assert it matches exactly.
+  const written: string = readFileSync(target, { encoding: "utf8" });
+  if (written !== LINE) {
+    console.error(`Verification failed: entry.txt content does not match the expected line.`);
+    process.exit(1);
+  }
 }
 
 main();
